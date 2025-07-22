@@ -7,6 +7,13 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from typing import Optional, Tuple, Any, Callable
 import asyncio
 
+from config import (
+    DEFAULT_GOOGLE_API_KEY,
+    DEFAULT_YOUTUBE_PIPEDREAM_URL,
+    DEFAULT_DRIVE_PIPEDREAM_URL,
+    DEFAULT_NOTION_PIPEDREAM_URL,
+)
+
 cfg = RunnableConfig(recursion_limit=100)
 
 def initialize_model(google_api_key: str) -> ChatGoogleGenerativeAI:
@@ -90,6 +97,11 @@ def run_agent_sync(
     """
     Synchronous wrapper for running the agent.
     """
+    google_api_key = google_api_key or DEFAULT_GOOGLE_API_KEY
+    youtube_pipedream_url = youtube_pipedream_url or DEFAULT_YOUTUBE_PIPEDREAM_URL
+    drive_pipedream_url = drive_pipedream_url or DEFAULT_DRIVE_PIPEDREAM_URL
+    notion_pipedream_url = notion_pipedream_url or DEFAULT_NOTION_PIPEDREAM_URL
+    
     async def _run():
         try:
             agent = await setup_agent_with_tools(
@@ -127,3 +139,5 @@ def run_agent_sync(
         return loop.run_until_complete(_run())
     finally:
         loop.close()
+
+
